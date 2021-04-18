@@ -20,14 +20,36 @@ class UserRepo {
 
     return toCamelCase(rows)[0];
   }
-  static async insert() {
-    //
+
+  static async insert(username, bio) {
+    const {
+      rows,
+    } = await pool.query(
+      `insert into users (username, bio) values ($1, $2) returning *;`,
+      [username, bio]
+    );
+
+    return toCamelCase(rows)[0];
   }
-  static async update() {
-    //
+
+  static async update(id, username, bio) {
+    const {
+      rows,
+    } = await pool.query(
+      `update users set username = $1, bio = $2 where id = $3 returning *;`,
+      [username, bio, id]
+    );
+    return toCamelCase(rows)[0];
   }
-  static async delete() {
-    //
+
+  static async delete(id) {
+    const { rows } = await pool.query(
+      `
+      delete from users where id = $1 returning *;
+    `,
+      [id]
+    );
+    return toCamelCase(rows)[0];
   }
 }
 
